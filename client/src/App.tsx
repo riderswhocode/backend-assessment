@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
 
@@ -15,9 +15,7 @@ const client = new ApolloClient({
 
 const App = () => {
 
-  const [step, setStep] = useState(3)
-  const [activeQuestion, setActiveQuestion] = useState(3)
-  const [answers, setAnswers] = useState([]);
+  const [step, setStep] = useState(2)
   
   const signUp = () => {
     setStep(2)
@@ -27,8 +25,8 @@ const App = () => {
     <ApolloProvider client={client}>
       <div className='App'>
         { step === 1 && <Signup onSignup={signUp} /> }
-        { step === 2 && <Start onQuizStart={undefined} /> }
-        { step === 3 && <QHolder/>}
+        { step === 2 && <Start onQuizStart={setStep} /> }
+        { step === 3 && <QHolder onSetStep={setStep} />}
       </div>
     </ApolloProvider>
     

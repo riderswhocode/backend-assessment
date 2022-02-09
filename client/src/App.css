@@ -62,3 +62,8 @@ form .field>input {
   text-transform: uppercase;
   color: #15d442;
 }
+
+.control {
+  display: flex;
+  flex-direction: column;
+}
