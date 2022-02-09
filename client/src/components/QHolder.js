@@ -8,7 +8,6 @@ const QHolder = (onSetStep ) => {
 
     const { loading, error, data } = useQuery(LoadQuestion)
     const [activeQuestion, setActiveQuestion] = useState(0)
-    const [answers, setAnswers] = useState([]);
 
     if (loading) { return <div>Loading....</div>}
     if (error) { return <div>{error}</div>}
@@ -25,13 +24,3 @@ const QHolder = (onSetStep ) => {
 }
 
 export default QHolder
-
-
-// { step === 3 && <Question 
-//     data={data.questions[activeQuestion]}
-//     onAnswerUpdate={setAnswers}
-//     numberOfQuestions={data.questions.length}
-//     activeQuestion={activeQuestion}
-//     onSetActiveQuestion={setActiveQuestion}
-//     onSetStep={setStep}
-//     />}

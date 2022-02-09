@@ -63,6 +63,11 @@ form .field>input {
   color: #15d442;
 }
 
+.control-holder {
+  max-width: 500px;
+  width: 100%;
+}
+
 .control {
   display: flex;
   flex-direction: column;

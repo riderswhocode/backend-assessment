@@ -21,10 +21,11 @@ const Question = ({ data, numberOfQuestions, activeQuestion, onSetActiveQuestion
     }  
 
     return (
-        <div>
+        <div className='control-holder'>
             <h2>{data.question}</h2>
             <div className='control'>
                 {data.options.map((choice, i) => (
+                    // choice.correct && setCorrect(choice.option)
                     <label key={i}>
                         <input type='radio' name="anwer" value={choice.option} onChange={changeHandler}/>
                     {choice.option}
