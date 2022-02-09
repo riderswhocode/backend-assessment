@@ -15,18 +15,17 @@ const client = new ApolloClient({
 
 const App = () => {
 
-  const [step, setStep] = useState(2)
-  
-  const signUp = () => {
-    setStep(2)
-  }
+  const [step, setStep] = useState(1)
+  const [userId, setUserId] = useState('')
 
   return (
     <ApolloProvider client={client}>
       <div className='App'>
-        { step === 1 && <Signup onSignup={signUp} /> }
-        { step === 2 && <Start onQuizStart={setStep} /> }
-        { step === 3 && <QHolder onSetStep={setStep} />}
+        {/* { step === 1 && <Signup onSignup={signUp} onQuizStart={setStep} /> } */}
+        {/* { step === 2 && <Start onQuizStart={setStep} /> } */}
+        { step === 1 && <Signup onQuizStart={setStep} onUserId={setUserId} /> }
+        { step === 2 && <QHolder onSetStep={setStep} onCurrentUser={userId} />}
+        { step === 3 && <Start onQuizStart={setStep} />}
       </div>
     </ApolloProvider>
     

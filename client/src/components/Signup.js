@@ -1,39 +1,53 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useMutation } from '@apollo/client';
 
 import { newUser } from '../queries/query'
 
-const Signup = ({onSignup}) => {
+const Signup = ({onQuizStart, onUserId}) => {
 
     const [email, setEmail] = useState('')
-    const [userId, setUserId] = useState('')
+    // const [userId, setUserId] = useState('1')
     const [qError, setQError] = useState('')
 
-    const [saveNewUser, {createdUser, loading, error}] = useMutation(newUser)
+    let userId;
+
+    const [saveNewUser, { data, loading, error }] = useMutation(newUser)
+    // , 
+    if (loading) {
+        console.log(`loading`)
+    }
+
     if (error) {
         setQError(error)
         console.log(qError) 
     }
-    if (createdUser) {
-        setUserId(createdUser.id)
+    if (data) {
+        // setUserId(data.addUser.id)
+        userId = data.addUser.id
+        onUserId(userId)
     }
-    
+  
+    const startQuiz = () => {
+        onQuizStart(2)
+    }
+
     return (
         <div className="Signup">
-            <h1 className='main-heading'>Sign up</h1>
+            {!userId && <h1 className='main-heading'>Sign up</h1>}
+            {userId && <h1 className='main-heading'>Welcome</h1>}
             <form id='new-user' onSubmit={e => {
                 e.preventDefault()
                 saveNewUser({
-                    variables: {email: email}
-                })
-               
+                    variables: {email: email} })
             }}>
                 {qError && <div className="has-text-danger">{qError}</div>}
-                <div className="field">
+                {!userId && <div className="field">
                     <input type="email" onChange={(e) => setEmail(e.target.value)} placeholder='Email Address'/>
-                </div>
-                <button className="btn signup-btn">Submit</button>
+                </div> }
+                {!userId && <button className="btn signup-btn">Submit</button> }
+                {userId && <button className="btn signup-btn" onClick={startQuiz}>Start</button> }
             </form>
+            
         </div>
     )
 }

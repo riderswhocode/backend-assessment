@@ -23,13 +23,13 @@ const UserAnswers = new GraphQLObjectType({
         user_id:  {
             type: Users,
             resolve(parent, args) {
-                return UserModel.findById({ _id: parent.id })
+                return UserModel.findById({ _id: parent.user_id })
             }
         },
         question_id: {
             type: Questions,
             resolve(parent, args) {
-                return QuestionModel.findById({ _id: parent._id })
+                return QuestionModel.findById({ _id: parent.question_id })
             }
         }
     })
@@ -93,9 +93,9 @@ const RootQuery = new GraphQLObjectType({
 
         user: {
             type: Users,
-            args: {id: { type: GraphQLID }},
+            args: {email: { type: GraphQLString }},
             resolve(parent, args) {
-                return UserModel.findById({_id: args.id})
+                return UserModel.findOne({email: args.email})
             }
         },
 
@@ -149,6 +149,25 @@ const Mutation = new GraphQLObjectType({
                     correct: args.correct
                 })
                 return AddedOption.save()
+            }
+        },
+
+        addAnswer: {
+            type: UserAnswers,
+            args: {
+                question_id: { type: new GraphQLNonNull(GraphQLID)},
+                user_id: { type: GraphQLID},
+                option: { type: GraphQLString},
+                points: { type: GraphQLInt}
+            },
+            resolve(parent, args) {
+                let user_answer = new UserAnswerModel({
+                    question_id: args.question_id,
+                    user_id: args.user_id,
+                    option: args.option,
+                    points: args.points
+                })
+                return user_answer.save()
             }
         }
     }
