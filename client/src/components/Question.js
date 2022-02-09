@@ -6,17 +6,14 @@ import { SaveAnswer } from '../queries/query'
 const Question = ({ data, numberOfQuestions, activeQuestion, onSetActiveQuestion, onSetStep, loggedUser }) => {
     
     const [selected, setSelected] = useState('')
-    // const [correct, setCorrect] = useState('')
-    const [msg, setMsg] = useState('')
-    const [timeLeft, setTimeLeft] = useState()
+ 
+    const [saveAnswer, {responseData, loading, error}] = useMutation(SaveAnswer)
 
-    const [saveAnswer, {response, loading, error}] = useMutation(SaveAnswer)
+    let points
+    let question_id
+    let user_id 
+    let correct
 
-    let points;
-    let question_id;
-    let user_id;
-    let correct;
-    
     useEffect(() => {
         // countDown(15)
         question_id = data.id
@@ -28,16 +25,6 @@ const Question = ({ data, numberOfQuestions, activeQuestion, onSetActiveQuestion
         })
     })
     
-    let countDown = (timer) => {
-        if (timer > 0) {
-            setInterval(() => {
-                timer--
-                console.log(timer)
-            }, 1000)   
-        }
-        return clearInterval(countDown)
-    }
-
     const changeHandler = (e) => {
         setSelected(e.target.value);
       }
@@ -50,13 +37,14 @@ const Question = ({ data, numberOfQuestions, activeQuestion, onSetActiveQuestion
             console.log("Better luck next time")
             points = 0
         }
-        debugger
+
         saveAnswer({ variables: {question_id: question_id, user_id: user_id, option: selected, points: points }})
         
         if (error) {
             console.log(error)
         }
-        if (response){
+
+        if (responseData) {
             if(activeQuestion < numberOfQuestions -1) {
                 onSetActiveQuestion(activeQuestion + 1)
             } else {
@@ -78,7 +66,7 @@ const Question = ({ data, numberOfQuestions, activeQuestion, onSetActiveQuestion
                 ))}
             </div>
             <button className="button" onClick={nextClickHandler}>Submit</button>
-            <p>{timeLeft}</p>
+            {/* <p>{timeLeft}</p> */}
         </div>
     )
 }

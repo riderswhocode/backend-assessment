@@ -21,10 +21,8 @@ const App = () => {
   return (
     <ApolloProvider client={client}>
       <div className='App'>
-        {/* { step === 1 && <Signup onSignup={signUp} onQuizStart={setStep} /> } */}
-        {/* { step === 2 && <Start onQuizStart={setStep} /> } */}
         { step === 1 && <Signup onQuizStart={setStep} onUserId={setUserId} /> }
-        { step === 2 && <QHolder onSetStep={setStep} onCurrentUser={userId} />}
+        { step === 2 && userId && <QHolder onSetStep={setStep} onCurrentUser={userId} />}
         { step === 3 && <Start onQuizStart={setStep} />}
       </div>
     </ApolloProvider>

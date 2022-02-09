@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useMutation } from '@apollo/client';
 
 import { newUser } from '../queries/query'
@@ -22,7 +22,6 @@ const Signup = ({onQuizStart, onUserId}) => {
         console.log(qError) 
     }
     if (data) {
-        // setUserId(data.addUser.id)
         userId = data.addUser.id
         onUserId(userId)
     }
