@@ -4,7 +4,7 @@ import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
 
 import './App.css';
 
-import Start from './components/Start'
+import End from './components/End'
 import Signup from './components/Signup'
 import QHolder from './components/QHolder'
 
@@ -15,15 +15,15 @@ const client = new ApolloClient({
 
 const App = () => {
 
-  const [step, setStep] = useState(1)
+  const [step, setStep] = useState(2)
   const [userId, setUserId] = useState('')
 
   return (
     <ApolloProvider client={client}>
       <div className='App'>
         { step === 1 && <Signup onQuizStart={setStep} onUserId={setUserId} /> }
-        { step === 2 && userId && <QHolder onSetStep={setStep} onCurrentUser={userId} />}
-        { step === 3 && <Start onQuizStart={setStep} />}
+        { step === 2 && <QHolder onSetStep={setStep} onCurrentUser={userId} />}
+        { step === 3 && <End onCurUserId={userId} />}
       </div>
     </ApolloProvider>
     

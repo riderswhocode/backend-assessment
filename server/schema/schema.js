@@ -104,6 +104,14 @@ const RootQuery = new GraphQLObjectType({
             resolve(parent, args) {
                 return OptionModel.find({})
             }
+        },
+
+        userAnswer: {
+            type: new GraphQLList(UserAnswers),
+            args: { user_id: { type: GraphQLID} },
+            resolve(parent, args) {
+                return UserAnswerModel.find({user_id: args.user_id})
+            }
         }
     }
 })
