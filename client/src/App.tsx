@@ -15,7 +15,7 @@ const client = new ApolloClient({
 
 const App = () => {
 
-  const [step, setStep] = useState(2)
+  const [step, setStep] = useState(1)
   const [userId, setUserId] = useState('')
 
   return (
