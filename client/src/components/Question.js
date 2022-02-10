@@ -1,10 +1,15 @@
 import { useMutation } from '@apollo/client'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 
 import { SaveAnswer } from '../queries/query'
 
 const Question = ({ data, numberOfQuestions, activeQuestion, onSetActiveQuestion, onSetStep, loggedUser }) => {
     
+    
+
+    const intervalRef = useRef(null)
+    const [timer, setTimer] = useState('00:00:00')
+
     const [selected, setSelected] = useState('')
     const [isCorrect, setIsCorrect] = useState(false)
     const [isError, setIsError] = useState('')
@@ -15,14 +20,15 @@ const Question = ({ data, numberOfQuestions, activeQuestion, onSetActiveQuestion
  
     const [saveAnswer, {responseData, loading, error}] = useMutation(SaveAnswer)
 
-    let points  
-    let totalPoints;
+    let points
+    let totalPoints  
     let question_id
     let user_id 
     let correct
 
     useEffect(() => {
         // countDown(15)
+        clearTimer(getDeadlineTime())
         question_id = data.id
         user_id = loggedUser
         data.options.map(choice => {
@@ -30,6 +36,8 @@ const Question = ({ data, numberOfQuestions, activeQuestion, onSetActiveQuestion
                 correct = choice.option
             }
         })
+
+        return () => { if(intervalRef.current) clearInterval(intervalRef.current) }
         
     })
     
@@ -78,6 +86,43 @@ const Question = ({ data, numberOfQuestions, activeQuestion, onSetActiveQuestion
         onSetStep(3)
     }
 
+    function getTimeRemaining(endtime) {
+        const total = Date.parse(endtime) - Date.parse(new Date())
+        const seconds = Math.floor( (total/1000) % 60)
+        const minutes = Math.floor( (total/1000/60) % 60)
+        const hours = Math.floor( (total/1000*60*60) % 24)
+        const days = Math.floor( total/(1000*60*60*24));
+        return { total, days, hours, minutes, seconds }
+    }
+
+    function startTimer(deadline) {
+        let {total, days, hours, minutes, seconds} = getTimeRemaining(deadline)
+        if(total >= 0) {
+            setTimer(
+                (hours > 9 ? hours : '0'+hours) + ':' + 
+                (minutes > 9 ? minutes : '0'+minutes) + ':' +
+                (seconds > 9 ? seconds : '0'+seconds)
+                
+            )} else {
+                clearInterval(intervalRef.current)
+            }
+    }
+
+    function clearTimer(endtime) {
+        setTimer('00:00:10');
+        if(intervalRef.current) clearInterval(intervalRef.current)
+        const id = setInterval(() => {
+            startTimer(endtime)
+        }, 1000)
+        intervalRef.current = id
+    }
+
+    function getDeadlineTime(){
+        let deadline = new Date();
+        deadline.setSeconds(deadline.getSeconds()+10)
+        return deadline
+    }
+
     return (
         <div>
             <div id='myModal' className='modal' style={{display: hide}}>
@@ -107,8 +152,8 @@ const Question = ({ data, numberOfQuestions, activeQuestion, onSetActiveQuestion
                     </label>
                     ))}
                 </div>
+                <p>{timer}</p>
                 <button className="button" onClick={submitHandler}>Submit</button>
-                {/* <p>{timeLeft}</p> */}
             </div>
         </div>
     )
