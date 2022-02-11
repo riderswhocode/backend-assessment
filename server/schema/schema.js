@@ -54,7 +54,6 @@ const Options = new GraphQLObjectType({
     fields: () => ({
         id: { type: GraphQLID },
         option: { type: GraphQLString },
-        detail: { type: GraphQLString },
         correct: { type: GraphQLBoolean},
         question_id: {
             type: Questions,
