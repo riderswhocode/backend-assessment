@@ -3,10 +3,8 @@ import { useEffect, useState, useRef } from 'react'
 
 import { SaveAnswer } from '../queries/query'
 
-const Question = ({ data, numberOfQuestions, activeQuestion, onSetActiveQuestion, onSetStep, loggedUser }) => {
+const Question = ({ data, numberOfQuestions, activeQuestion, onSetActiveQuestion, onSetStep, loggedUser, acumPoints, onSetAcumPoints }) => {
     
-    
-
     const intervalRef = useRef(null)
     const [timer, setTimer] = useState('00:00:00')
 
@@ -16,19 +14,17 @@ const Question = ({ data, numberOfQuestions, activeQuestion, onSetActiveQuestion
     const [message, setMessage] = useState('')
     const [hide, setHide] = useState('none')
     const [showScore, setShowScore] = useState('none')
-    const [totalScore, setTotalScore] = useState()
- 
+    
+    // const [points, setPoints] = useState()
+
     const [saveAnswer, {responseData, loading, error}] = useMutation(SaveAnswer)
 
     let points
-    let totalPoints  
     let question_id
     let user_id 
     let correct
 
     useEffect(() => {
-        // countDown(15)
-        clearTimer(getDeadlineTime())
         question_id = data.id
         user_id = loggedUser
         data.options.map(choice => {
@@ -36,21 +32,29 @@ const Question = ({ data, numberOfQuestions, activeQuestion, onSetActiveQuestion
                 correct = choice.option
             }
         })
-
-        return () => { if(intervalRef.current) clearInterval(intervalRef.current) }
+        
+        // Timer Related
+        // clearTimer(getDeadlineTime())
+        // return () => { if(intervalRef.current) clearInterval(intervalRef.current) }
         
     })
     
     const changeHandler = (e) => {
         setSelected(e.target.value);
-        if (correct === selected) {
+        console.log(correct)
+        console.log(e.target.value)
+        if (correct === e.target.value) {
             points = 100
-            totalPoints = totalPoints + points
+            console.log('Correct')
+            console.log(points)
+            onSetAcumPoints(acumPoints + points)
+          
+            
         } else {
             points = 0
-        }
-        console.log(`Total Points: ${totalPoints}`)
-        setTotalScore(totalPoints)
+            console.log('Wrong')
+            console.log(points)
+        }  
       }
 
     const nextClickHandler = (e) => {
@@ -70,7 +74,8 @@ const Question = ({ data, numberOfQuestions, activeQuestion, onSetActiveQuestion
         } else {
             setShowScore('hide')
         }
-        console.log(`Total Score: ${totalScore}`)
+        setSelected('')
+        console.log(`Total Score: ${acumPoints}`)
     }
     
     const submitHandler = (e) => {
@@ -83,9 +88,11 @@ const Question = ({ data, numberOfQuestions, activeQuestion, onSetActiveQuestion
     }
 
     const doneClickHandler = () => {
-        onSetStep(3)
+        onSetStep(1)
     }
 
+
+    // COPY PASTED TIMER RELATED CODE
     function getTimeRemaining(endtime) {
         const total = Date.parse(endtime) - Date.parse(new Date())
         const seconds = Math.floor( (total/1000) % 60)
@@ -122,13 +129,14 @@ const Question = ({ data, numberOfQuestions, activeQuestion, onSetActiveQuestion
         deadline.setSeconds(deadline.getSeconds()+10)
         return deadline
     }
+    //END OF COPY PASTED TIMER RELATED CODE
 
     return (
         <div>
             <div id='myModal' className='modal' style={{display: hide}}>
                 <div className='modal-content'>
-                    {isCorrect && <p className='correct'>Correct!</p>}
-                    {!isCorrect && <p className='wrong'>Wrong!</p>}
+                    {isCorrect && <div><p className='correct'>Correct!</p> <p>You get 100 points</p></div>}
+                    {!isCorrect && <div><p className='wrong'>Wrong!</p> <p>You get 0 point</p></div>}
                     {!isError && <p className='error'>{message}</p>}
                     <button className="button" onClick={nextClickHandler}>Next Question</button>
                 </div>
@@ -137,7 +145,7 @@ const Question = ({ data, numberOfQuestions, activeQuestion, onSetActiveQuestion
             <div id='myModal' className='modal' style={{display: showScore}}>
                 <div className='modal-content'>
                     <h2>Total Score</h2>
-                    <h1>{totalScore}</h1>
+                    <h1>{acumPoints}</h1>
                     <button className="button" onClick={doneClickHandler}>Done</button>
                 </div>
             </div>

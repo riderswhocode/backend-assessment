@@ -8,6 +8,7 @@ const QHolder = ({onSetStep, onCurrentUser }) => {
 
     const { loading, error, data } = useQuery(LoadQuestion)
     const [activeQuestion, setActiveQuestion] = useState(0)
+    const [totalPoints, setTotalPoints] = useState(0)
 
     if (loading) { return <div>Loading....</div>}
     if (error) { return <div>{error}</div>}
@@ -19,7 +20,9 @@ const QHolder = ({onSetStep, onCurrentUser }) => {
             activeQuestion={activeQuestion}
             onSetActiveQuestion={setActiveQuestion}
             onSetStep={onSetStep}
-            loggedUser={onCurrentUser} />     
+            loggedUser={onCurrentUser}
+            acumPoints={totalPoints}
+            onSetAcumPoints={setTotalPoints} />     
      )
     
 }
