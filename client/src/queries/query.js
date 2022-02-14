@@ -7,6 +7,13 @@ const newUser = gql`mutation($email: String!) {
     }
   }`
 
+const newUserV2 = gql`mutation($email: String!) {
+    addUser(userInput: {email: $email}){
+        _id
+        email
+    }
+  }`
+
  const LoadQuestion = gql`query BrowseQuestions {
     questions {
       id
@@ -38,4 +45,4 @@ const getUserPoints = gql`query($user_id: ID!) {
   }
 }`
 
-  export { newUser, LoadQuestion, SaveAnswer, getUserPoints }
+  export { newUser, newUserV2, LoadQuestion, SaveAnswer, getUserPoints }

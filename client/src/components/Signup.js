@@ -1,17 +1,43 @@
 import React, { useState } from 'react'
-import { useMutation } from '@apollo/client';
+import { gql, useMutation } from '@apollo/client';
 
-import { newUser } from '../queries/query'
+import { newUser, newUserV2 } from '../queries/query'
 
-const Signup = ({onQuizStart, onUserId}) => {
+const Signup = ({onQuizStart, onUserId, onClient}) => {
 
     const [email, setEmail] = useState('')
     const [qError, setQError] = useState('')
+    const [userId, setUserId] = useState()
 
-    let userId;
+    let Id;
 
-    const [saveNewUser, { data, loading, error }] = useMutation(newUser)
-    // , 
+    const [saveNewUser, { data, loading, error }] = useMutation(newUserV2)
+    
+    const submitData = () => {
+        onClient
+        .query({
+            query: gql`
+                query BrowseUser {
+                    user(email: "${email}") {
+                        id
+                        email
+                    }
+                }
+            `
+        })
+        .then(result => {
+            if (result.data.user) {
+                setUserId(result.data.user.id)
+            }
+
+            if(!result.data.user) {
+                console.log("cannot find email..")
+                saveNewUser({
+                    variables: {email: email} })
+            }
+        })
+    }
+ 
     if (loading) {
         console.log(`loading`)
     }
@@ -20,9 +46,13 @@ const Signup = ({onQuizStart, onUserId}) => {
         setQError(error)
         console.log(qError) 
     }
+
     if (data) {
-        userId = data.addUser.id
-        onUserId(userId)
+        console.log(data)
+        // userId = data.addUser.id
+        // setUserId(data.addUser.id)
+        Id = data.addUser._id
+        onUserId(Id)
     }
   
     const startQuiz = () => {
@@ -31,21 +61,21 @@ const Signup = ({onQuizStart, onUserId}) => {
 
     return (
         <div className="Signup">
-            {!userId && <h1 className='main-heading'>Sign up</h1>}
-            {userId && <h1 className='main-heading'>Welcome</h1>}
+            {!Id && <h1 className='main-heading'>Sign up</h1>}
+            {Id && <h1 className='main-heading'>Welcome</h1>}
             <form id='new-user' onSubmit={e => {
                 e.preventDefault()
                 saveNewUser({
                     variables: {email: email} })
             }}>
                 {qError && <div className="has-text-danger">{qError}</div>}
-                {!userId && <div className="field">
+                {!Id && <div className="field">
                     <input type="email" onChange={(e) => setEmail(e.target.value)} placeholder='Email Address'/>
                 </div> }
-                {!userId && <button className="btn signup-btn">Submit</button> }
-                {userId && <button className="btn signup-btn" onClick={startQuiz}>Start</button> }
+                {!Id && <button className="btn signup-btn">Submit</button> }
+                {Id && <button className="btn signup-btn" onClick={startQuiz}>Start</button> }
             </form>
-            
+            {/* <button onClick={() => submitData()}>TEST USER</button> */}
         </div>
     )
 }
