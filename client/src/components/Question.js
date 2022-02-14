@@ -24,15 +24,21 @@ const Question = ({ data, numberOfQuestions, activeQuestion, onSetActiveQuestion
     let user_id 
     let correct
 
+    // interface Choices {
+    //     id: string
+    //     option: string
+    //     correct: boolean
+    // }
+
     useEffect(() => {
         question_id = data.id
         user_id = loggedUser
-        data.options.map(choice => {
+        data.options.map((choice) => {
             if (choice.correct) {
                 correct = choice.option
             }
         })
-        
+
         // Timer Related
         // clearTimer(getDeadlineTime())
         // return () => { if(intervalRef.current) clearInterval(intervalRef.current) }
@@ -41,19 +47,13 @@ const Question = ({ data, numberOfQuestions, activeQuestion, onSetActiveQuestion
     
     const changeHandler = (e) => {
         setSelected(e.target.value);
-        console.log(correct)
-        console.log(e.target.value)
         if (correct === e.target.value) {
             points = 100
-            console.log('Correct')
-            console.log(points)
             onSetAcumPoints(acumPoints + points)
           
             
         } else {
             points = 0
-            console.log('Wrong')
-            console.log(points)
         }  
       }
 
@@ -75,7 +75,6 @@ const Question = ({ data, numberOfQuestions, activeQuestion, onSetActiveQuestion
             setShowScore('hide')
         }
         setSelected('')
-        console.log(`Total Score: ${acumPoints}`)
     }
     
     const submitHandler = (e) => {
@@ -93,42 +92,42 @@ const Question = ({ data, numberOfQuestions, activeQuestion, onSetActiveQuestion
 
 
     // COPY PASTED TIMER RELATED CODE
-    function getTimeRemaining(endtime) {
-        const total = Date.parse(endtime) - Date.parse(new Date())
-        const seconds = Math.floor( (total/1000) % 60)
-        const minutes = Math.floor( (total/1000/60) % 60)
-        const hours = Math.floor( (total/1000*60*60) % 24)
-        const days = Math.floor( total/(1000*60*60*24));
-        return { total, days, hours, minutes, seconds }
-    }
+    // function getTimeRemaining(endtime: any) {
+    //     const total = Date.parse(endtime) - Date.parse(new Date())
+    //     const seconds = Math.floor( (total/1000) % 60)
+    //     const minutes = Math.floor( (total/1000/60) % 60)
+    //     const hours = Math.floor( (total/1000*60*60) % 24)
+    //     const days = Math.floor( total/(1000*60*60*24));
+    //     return { total, days, hours, minutes, seconds }
+    // }
 
-    function startTimer(deadline) {
-        let {total, days, hours, minutes, seconds} = getTimeRemaining(deadline)
-        if(total >= 0) {
-            setTimer(
-                (hours > 9 ? hours : '0'+hours) + ':' + 
-                (minutes > 9 ? minutes : '0'+minutes) + ':' +
-                (seconds > 9 ? seconds : '0'+seconds)
+    // function startTimer(deadline: any) {
+    //     let {total, days, hours, minutes, seconds} = getTimeRemaining(deadline)
+    //     if(total >= 0) {
+    //         setTimer(
+    //             (hours > 9 ? hours : '0'+hours) + ':' + 
+    //             (minutes > 9 ? minutes : '0'+minutes) + ':' +
+    //             (seconds > 9 ? seconds : '0'+seconds)
                 
-            )} else {
-                clearInterval(intervalRef.current)
-            }
-    }
+    //         )} else {
+    //             clearInterval(intervalRef.current)
+    //         }
+    // }
 
-    function clearTimer(endtime) {
-        setTimer('00:00:10');
-        if(intervalRef.current) clearInterval(intervalRef.current)
-        const id = setInterval(() => {
-            startTimer(endtime)
-        }, 1000)
-        intervalRef.current = id
-    }
+    // function clearTimer(endtime: any) {
+    //     setTimer('00:00:10');
+    //     if(intervalRef.current) clearInterval(intervalRef.current)
+    //     const id = setInterval(() => {
+    //         startTimer(endtime)
+    //     }, 1000)
+    //     intervalRef.current = id
+    // }
 
-    function getDeadlineTime(){
-        let deadline = new Date();
-        deadline.setSeconds(deadline.getSeconds()+10)
-        return deadline
-    }
+    // function getDeadlineTime(){
+    //     let deadline = new Date();
+    //     deadline.setSeconds(deadline.getSeconds()+10)
+    //     return deadline
+    // }
     //END OF COPY PASTED TIMER RELATED CODE
 
     return (
@@ -154,14 +153,14 @@ const Question = ({ data, numberOfQuestions, activeQuestion, onSetActiveQuestion
                 <h2>{data.question}</h2>
                 <div className='control'>
                     {data.options.map((choice, i) => (
-                        <label key={i}>
+                        <label key={i} className="control-key">
                             <input type='radio' name="anwer" value={choice.option} onChange={changeHandler}/>
                         {choice.option}
                     </label>
                     ))}
                 </div>
                 <p>{timer}</p>
-                <button className="button" onClick={submitHandler}>Submit</button>
+                <button className="btn button" onClick={submitHandler}>Submit</button>
             </div>
         </div>
     )

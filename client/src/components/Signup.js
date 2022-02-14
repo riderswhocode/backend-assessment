@@ -6,7 +6,6 @@ import { newUser } from '../queries/query'
 const Signup = ({onQuizStart, onUserId}) => {
 
     const [email, setEmail] = useState('')
-    // const [userId, setUserId] = useState('1')
     const [qError, setQError] = useState('')
 
     let userId;
