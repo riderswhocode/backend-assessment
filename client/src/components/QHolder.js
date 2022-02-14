@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useQuery } from '@apollo/client'
 
-import { LoadQuestion } from '../queries/query'
+import { LoadQuestion, LoadQuestionV2 } from '../queries/query'
 import Question from '../components/Question'
 
 const QHolder = ({onSetStep, onCurrentUser }) => {
 
-    const { loading, error, data } = useQuery(LoadQuestion)
+    const { loading, error, data } = useQuery(LoadQuestionV2)
     const [activeQuestion, setActiveQuestion] = useState(0)
     const [totalPoints, setTotalPoints] = useState(0)
 

@@ -14,6 +14,19 @@ const newUserV2 = gql`mutation($email: String!) {
     }
   }`
 
+const LoadQuestionV2 = gql`query BrowseQuestionV2 {
+  questions {
+    _id
+    question
+    options {
+      _id
+      option
+      correct
+      question_id
+    }
+  }
+}`
+
  const LoadQuestion = gql`query BrowseQuestions {
     questions {
       id
@@ -45,4 +58,4 @@ const getUserPoints = gql`query($user_id: ID!) {
   }
 }`
 
-  export { newUser, newUserV2, LoadQuestion, SaveAnswer, getUserPoints }
+  export { newUser, newUserV2, LoadQuestionV2, LoadQuestion, SaveAnswer, getUserPoints }
