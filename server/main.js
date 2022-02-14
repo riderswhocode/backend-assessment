@@ -28,12 +28,6 @@ app.use('/graphql', graphqlHTTP({
     graphiql: true
 }))
 
-// TO MAKE A REQUEST IN GRAPHQL
-// {
-//     "query": "{ hello { text views} }"
-// }
-
-
 app.listen(process.env.PORT || 3000, () => {
     console.log(`Express Server Running on ${process.env.PORT || 3000}`)
 })
