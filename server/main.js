@@ -4,6 +4,9 @@ const { graphqlHTTP } = require('express-graphql')
 const schema = require('./schema/schema')
 const cors = require('cors')
 
+const testSchema = require('./graphql/schem')
+const testResolver = require('./graphql/resolver')
+
 const app = express()
 
 app.use(cors())
@@ -15,10 +18,21 @@ mongoose.connection.once('open', () => {
     console.log("Successfully connected to MongoDB Database");
 })
 
+// app.use('/graphql', graphqlHTTP({
+//     schema,
+//     graphiql: true
+// }))
 app.use('/graphql', graphqlHTTP({
-    schema,
+    schema: testSchema,
+    rootValue: testResolver,
     graphiql: true
 }))
+
+// TO MAKE A REQUEST IN GRAPHQL
+// {
+//     "query": "{ hello { text views} }"
+// }
+
 
 app.listen(process.env.PORT || 3000, () => {
     console.log(`Express Server Running on ${process.env.PORT || 3000}`)
