@@ -52,10 +52,18 @@ const SaveAnswer = gql`mutation($question_id: ID!, $user_id: ID, $option: String
   }
 }`
 
+const SaveAnswerV2 = gql`mutation($option: String, $points: Int, $question_id: String!, $user_id: String!) {
+  saveUserAnswer(userInput: {option: $option, points: $points, question_id: $question_id, user_id: $user_id}) {
+    _id
+    option
+    points
+  }
+}`
+
 const getUserPoints = gql`query($user_id: ID!) {
   userAnswer(user_id: $user_id) {
     points
   }
 }`
 
-  export { newUser, newUserV2, LoadQuestionV2, LoadQuestion, SaveAnswer, getUserPoints }
+  export { newUser, newUserV2, LoadQuestionV2, LoadQuestion, SaveAnswer, SaveAnswerV2, getUserPoints }
