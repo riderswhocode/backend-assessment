@@ -25,6 +25,14 @@ module.exports = buildSchema(`
         question: String
     }
 
+    type UserAnswer {
+        _id: ID
+        option: String
+        points: Int
+        question_id: String
+        user_id: String
+    }
+
     input UserData {
         email: String!
     }
@@ -39,6 +47,13 @@ module.exports = buildSchema(`
         question_id: String
     }
 
+    input AnswersInfo {
+        question_id: String
+        user_id: String
+        option: String
+        points: Int
+    }
+
     type RootQueryType {
         questions: [QuestionData]
     }
@@ -47,6 +62,7 @@ module.exports = buildSchema(`
         addUser(userInput: UserData): User
         addQuestion(userInput: QuestionInfo): Question
         addAnswers(userInput: OptionInfo): QuestionData
+        saveUserAnswer(userInput: AnswersInfo): UserAnswer
     }
 
     schema {

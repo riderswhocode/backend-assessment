@@ -1,6 +1,7 @@
 const UserModel = require('../models/user.model')
 const QuestionModel = require('../models/question.model')
 const OptionModel = require('../models/option.model')
+const AnswerModel = require('../models/user_answer.model')
 
 module.exports = {
     addUser: async function(args, req) {
@@ -47,12 +48,23 @@ module.exports = {
             question_id: args.userInput.question_id
 
         })
-        const newOption = addOptions.save()
+        addOptions.save()
         const Question = await QuestionModel.findById({_id: args.userInput.question_id})
         const Options = await OptionModel.find({question_id: args.userInput.question_id})
         return {
             ...Question._doc,
             options: Options
         }
+    },
+
+    saveUserAnswer: async function(args, req) {
+        const answer = new AnswerModel({
+            option: args.userInput.option,
+            points: args.userInput.points,
+            question_id: args.userInput.question_id.toString(),
+            user_id: args.userInput.user_id.toString()
+        })
+        const newAnswer = answer.save()
+        return newAnswer
     }
 }
