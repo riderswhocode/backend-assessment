@@ -30,5 +30,29 @@ module.exports = {
                 options: options
             }
         })
+    },
+
+    addQuestion: async function(args, req) {
+        const newQuestion = new QuestionModel({
+            question: args.userInput.question
+        })
+        const created = newQuestion.save()
+        return created
+    },
+
+    addAnswers: async function(args, req) {
+        const addOptions = new OptionModel({
+            option: args.userInput.option,
+            correct: args.userInput.correct,
+            question_id: args.userInput.question_id
+
+        })
+        const newOption = addOptions.save()
+        const Question = await QuestionModel.findById({_id: args.userInput.question_id})
+        const Options = await OptionModel.find({question_id: args.userInput.question_id})
+        return {
+            ...Question._doc,
+            options: Options
+        }
     }
 }

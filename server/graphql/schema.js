@@ -19,8 +19,24 @@ module.exports = buildSchema(`
         _id: ID
         email: String
     }
+
+    type Question {
+        _id: ID
+        question: String
+    }
+
     input UserData {
         email: String!
+    }
+
+    input QuestionInfo {
+        question: String!
+    }
+
+    input OptionInfo {
+        option: String
+        correct: Boolean
+        question_id: String
     }
 
     type RootQueryType {
@@ -29,6 +45,8 @@ module.exports = buildSchema(`
 
     type RootMutation {
         addUser(userInput: UserData): User
+        addQuestion(userInput: QuestionInfo): Question
+        addAnswers(userInput: OptionInfo): QuestionData
     }
 
     schema {
