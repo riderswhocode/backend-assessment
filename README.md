@@ -6,6 +6,7 @@ This is a simple demonstration of NodeJS project with
 - MongoDB
 - GraphQL
 - ReactJS
+- Apollo
 
 To run this project
 
