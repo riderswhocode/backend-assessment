@@ -10,6 +10,7 @@ This is a simple demonstration of NodeJS project with
 To run this project
 
 > cd server && npm run start
+> 
 > cd client && npm start
 
 make sure you run npm i on each folder
